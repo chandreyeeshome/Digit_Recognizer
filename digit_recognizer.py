@@ -18,6 +18,7 @@ import os
 import shutil
 from google.colab import drive, files
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
@@ -31,24 +32,27 @@ from tensorflow.keras import regularizers
 train = pd.read_csv('train.csv')
 test = pd.read_csv('test.csv')
 
+# Showing first 5 elements from train set
 train.head()
 
+# Showing first 5 elements from test set
 test.head()
 
+# Printing number of samples
 print('Number of Train Sample: ', train.shape[0])
 print('Number of Test Sample: ', test.shape[0])
 
 """## Preprocessing"""
 
-# use only label column for Y_train
+# Preparing the target variable
 Y_train = train["label"]
 
-# Drop the label column for X_train
+# Preparing the feature set
 X_train = train.drop(labels = ["label"],axis = 1)
 
-# Let's see what is the Y_train looks like
-sns.countplot(x=Y_train)
-Y_train.value_counts()
+# Visualize distribution of target variable
+sns.countplot(x=Y_train) # Bar plot
+Y_train.value_counts() # Count of each class in y-axis
 
 # Check missing values
 print('Missing Values Train-set :',train.isnull().values.any())
@@ -68,7 +72,7 @@ Y_train = tf.keras.utils.to_categorical(Y_train, num_classes = 10)
 # Data Splitting
 X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size=.1, random_state=7)
 
-# Preview Images
+# Preview the first 30 images
 plt.figure(figsize=(15,4.5))
 for i in range(30):
     plt.subplot(3, 10, i+1)
@@ -77,6 +81,7 @@ for i in range(30):
 plt.subplots_adjust(wspace=-0.1, hspace=-0.1)
 plt.show()
 
+# Image augmentaion for better learning and performance of model
 train_datagen = ImageDataGenerator(
     rotation_range=20,
     width_shift_range=0.05,
@@ -86,7 +91,7 @@ train_datagen = ImageDataGenerator(
 
 train_datagen.fit(X_train)
 
-# Preview Augmented Images
+# Preview 30 augmented images (10 augmented images for 3 original images in train set, each)
 X_train3 = X_train[9,].reshape((1,28,28,1))
 Y_train3 = Y_train[9,].reshape((1,10))
 plt.figure(figsize=(15,4.5))
@@ -100,7 +105,7 @@ for i in range(30):
 plt.subplots_adjust(wspace=-0.1, hspace=-0.1)
 plt.show()
 
-"""## Define Model"""
+"""## Define Model Architecture"""
 
 model = Sequential()
 
@@ -166,3 +171,66 @@ for i in range(40):
     plt.axis('off')
 plt.subplots_adjust(wspace=0.3, hspace=-0.1)
 plt.show()
+
+model.save("model.h5")
+
+# Evaluate the model
+# test_loss, test_accuracy = model.evaluate(X_test, test, verbose=2)
+# print(f"Test Loss: {test_loss}")
+# print(f"Test Accuracy: {test_accuracy}")
+
+# # Predict the labels for the test set
+# predictions = model.predict(X_test)
+
+# # Convert the predictions from one-hot encoded format to class labels
+# predicted_labels = np.argmax(predictions, axis=1)
+
+# # Convert the true labels from one-hot encoded format to class labels (if Y_test is one-hot encoded)
+# true_labels = np.argmax(test, axis=1)
+
+# # Calculate accuracy
+# accuracy = accuracy_score(true_labels, predicted_labels)
+# print(f"Computed Test Accuracy: {accuracy}")
+
+# # Number of samples to visualize
+# num_samples = 20
+
+# # Plot the first 'num_samples' test images and their predicted labels
+# plt.figure(figsize=(15, 6))
+# for i in range(num_samples):
+#     plt.subplot(2, num_samples // 2, i + 1)
+#     plt.imshow(X_test[i].reshape(28, 28), cmap=plt.cm.binary)
+#     plt.title(f"Pred: {predicted_labels[i]}")
+#     plt.axis('off')
+# plt.subplots_adjust(wspace=0.3, hspace=-0.1)
+# plt.show()
+
+"""### Testing custom input under process"""
+
+import cv2
+
+test_img = cv2.imread("/content/img.png")
+test_img = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
+test_img = cv2.resize(test_img, (28, 28))
+test_input = np.expand_dims(test_img, axis=0)
+
+plt.imshow(test_img)
+
+test_input = test_img.reshape((1,28,28,1))
+
+model.predict(test_input)
+
+var = (model.predict(test_input) > 0.5).astype("int32")
+
+# Define the class labels
+class_labels = ["class_0", "class_1", "class_2", "class_3", "class_4",
+                "class_5", "class_6", "class_7", "class_8", "class_9"]
+
+# Get the predicted class index
+predicted_class_index = np.argmax(var)
+
+# Map the class index to the class label
+predicted_class_label = class_labels[predicted_class_index]
+
+# Print the predicted class label
+print(f"Predicted class: {predicted_class_label}")
