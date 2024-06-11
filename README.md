@@ -96,7 +96,7 @@ To set up the environment for this project, you can follow these steps:
    cd Digit_Recognizer
    ```
 
-2. **Install the required packages:**
+2. **Install the required packages**
 
 ## Usage
 
@@ -118,7 +118,5 @@ If you have any suggestions for improving this README or the project itself, ple
 
 ---
 
-**References:**
+**Reference:**
 - [Digit Recognizer - Kaggle](https://www.kaggle.com/c/digit-recognizer)
-- [GitHub - CNN Digit Recognizer](https://github.com/andikarachman/CNN-Digit-Recognizer)
-- [GitHub - Softmax Digit Recognizer](https://github.com/akshaybahadur21/Digit-Recognizer)
