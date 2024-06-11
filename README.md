@@ -15,8 +15,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [Issues](#issues)
-- [License](#license)
 - [Contact](#contact)
 
 ## Overview
@@ -32,24 +30,18 @@ The repository is structured as follows:
 ```
 Digit_Recognizer/
 │
-├── data/
-│   ├── train.csv        # Training data
-│   ├── test.csv         # Test data
-│   └── sample_submission.csv  # Sample submission file
+├── Digit_Recognizer.ipynb     # Notebook for the whole process
+├── digit_recognizer.py        # Script for the whole process
+├── model.h5                   # Saved model
+├── test.csv                   # Training dataset
+├── train.csv                  # Testing dataset
 │
-├── display_random.py    # Script to display random test images with predictions
-├── model_architecture.json  # JSON file containing the model architecture
-├── model_weights.h5     # HDF5 file containing the model weights
-├── predictions.csv      # Output file for predictions on test data
-├── test.py              # Script to generate predictions on test data
-├── train.py             # Script to train the model
-│
-└── README.md            # Readme file
+└── README.md                  # Readme file
 ```
 
 ## Data
 
-The project uses the MNIST dataset, which consists of 60,000 training images and 10,000 test images of handwritten digits, each labeled with a corresponding digit from 0 to 9. The images are grayscale and have a resolution of 28x28 pixels.
+The project uses the MNIST dataset, which consists of 42,000 training images and 28,000 test images of handwritten digits, each labeled with a corresponding digit from 0 to 9. The images are grayscale and have a resolution of 28x28 pixels.
 
 ## Model Architecture
 
@@ -63,48 +55,21 @@ This combination allows the model to capture the relevant patterns and character
 
 ## Training the Model
 
-The model is trained using the `train.py` script, which:
 - Loads the training data from `train.csv`.
 - Preprocesses the data by normalizing pixel values.
 - Augments the data to improve generalization.
 - Compiles the model with an appropriate loss function and optimizer.
 - Trains the model over a set number of epochs, saving the best model weights.
 
-### Running the Training Script
-
-To train the model, execute the following command in your terminal:
-
-```bash
-python train.py
-```
-
 ## Testing the Model
 
-Once the model is trained, you can evaluate its performance on the test set using the `test.py` script. This script:
 - Loads the test data from `test.csv`.
 - Preprocesses the data similarly to the training set.
 - Uses the trained model to predict labels for the test images.
-- Saves the predictions to `predictions.csv`.
 
-### Running the Testing Script
+## Previewing Predictions
 
-To generate predictions on the test set, run:
-
-```bash
-python test.py
-```
-
-## Displaying Predictions
-
-The `display_random.py` script allows you to visualize a random selection of test images along with their predicted labels. This can be useful for understanding how the model performs on individual samples.
-
-### Running the Display Script
-
-To display random predictions, use the command:
-
-```bash
-python display_random.py
-```
+ Allows you to visualize a random selection of 40 test images along with their predicted labels. This can be useful for understanding how the model performs on individual samples.
 
 ## Image Augmentation
 
@@ -133,31 +98,9 @@ To set up the environment for this project, you can follow these steps:
 
 2. **Install the required packages:**
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-
 ## Usage
 
-After setting up the environment, you can train, test, and visualize the model using the provided scripts. Here’s a quick guide:
-
-1. **Train the model:**
-
-   ```bash
-   python train.py
-   ```
-
-2. **Generate predictions on the test set:**
-
-   ```bash
-   python test.py
-   ```
-
-3. **Display random test images with predictions:**
-
-   ```bash
-   python display_random.py
-   ```
+After setting up the environment, you can train, test, and visualize the model using the provided notebook. 
 
 ## Contributing
 
